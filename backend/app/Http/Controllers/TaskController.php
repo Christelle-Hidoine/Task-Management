@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -24,13 +25,55 @@ class TaskController extends Controller
     public function show($id)
     {
         // Utilisation de la méthode find($id) grâce à l'héritage
-        $task = Task::find($id);
+        $task = Task::findOrFail($id);
         // Retour auto au format JSON
+        return $task;
+    }
 
-        if ($task) {
-            return $task;
-        } else {
-            return response(null, 404);
-        }
+    // Création de la méthode create
+    public function create(Request $request)
+    {
+        // var_dump($request); die;
+        // Extraction des valeurs passées de la body de la requête
+        $title = $request->input('title');
+
+        // On crée une nouvelle instance, puis on lui définit la propriété title
+        $task = new Task();
+        $task->title = $title;
+
+        // On sauvegarde, puis on gère la réponse avec le code HTTP qui convient
+        // 201 : Created
+        // 500 : Internal Server Error
+        $task->saveOrFail();
+        return $task;
+    }
+
+    // Méthode pour modifier les propriétés correspondant à 1 id dans la bdd
+    public function update(Request $request, $id)
+    {
+        // recherche objet à modifier
+        $task = Task::findOrFail($id);
+
+        // Extraction des valeurs passées de la body à la requête
+        $title = $request->input('title');
+
+        // set de la valeur de la propriété $title
+        $task->title = $title;
+
+        $task->updateOrFail();
+        return $task;
+    }
+
+    // Création méthode delete
+    public function delete($id)
+    {
+        // recherche objet à modifier
+        $task = Task::findOrFail($id);
+
+        // suppression dans la BDD
+        // réponse HTTP : 200 -> Delete
+        // réponse HTTP : 500 -> Internal Server Error
+        $task->deleteOrFail();
+        return $task;
     }
 }
