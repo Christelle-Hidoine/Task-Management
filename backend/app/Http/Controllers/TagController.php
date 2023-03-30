@@ -12,7 +12,12 @@ class TagController extends Controller
         // Utilisation de la méthode all() grâce à l'héritage
         $tags = Tag::all();
         // Retour automatique au format JSON 👌
-        return $tags;
+
+        if ($tags) {
+            return $tags;
+        } else {
+            return response(null, 404);
+        }
     }
 
     // Création de la méthode show($id)
@@ -21,6 +26,11 @@ class TagController extends Controller
         // Utilisation de la méthode find($id) grâce à l'héritage
         $tag = Tag::find($id);
         // Retour auto au format JSON
-        return $tag;
+
+        if ($tag) {
+            return $tag;
+        } else {
+            return response(null, 404);
+        }
     }
 }

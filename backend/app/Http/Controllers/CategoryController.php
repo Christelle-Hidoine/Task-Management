@@ -12,7 +12,12 @@ class CategoryController extends Controller
         // Utilisation de la méthode all() grâce à l'héritage
         $categories = Category::all();
         // Retour automatique au format JSON 👌
-        return $categories;
+
+        if ($categories) {
+            return $categories;
+        } else {
+            return response(null, 404);
+        }
     }
 
     // Création de la méthode show
@@ -21,7 +26,11 @@ class CategoryController extends Controller
         // Utilisation de la méthode find() grâce à l'héritage
         $category = Category::find($id);
         // Retour automatique au format JSON 👌
-        return $category;
-    }
 
+        if ($category) {
+            return $category;
+        } else {
+            return response(null, 404);
+        }
+    }
 }
