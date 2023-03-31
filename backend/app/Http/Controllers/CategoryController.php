@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -33,7 +34,19 @@ class CategoryController extends Controller
     // Création de la méthode create
     public function create(Request $request)
     {
-        // var_dump($request); die;
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input name
+        // avec l'outil Facade Validator on vérifie :
+            // existence de $name : 'required'
+            // not empty : 'filled'
+        $validator = Validator::make($request->input(), [
+            'name' => ['required', 'filled']
+        ]);
+
+            // Si validation ko
+        if ($validator->fails()) {
+            // si ko = code HTTP 422 avec un message d'erreur
+            return response()->json($validator->errors(), 422);
+        }
         // Extraction des valeurs passées de la body de la requête
         $name = $request->input('name');
 
@@ -53,6 +66,20 @@ class CategoryController extends Controller
     {
         // recherche objet à modifier
         $category = Category::findOrFail($id);
+
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input name
+        // avec l'outil Facade Validator on vérifie :
+            // existence de $name : 'required'
+            // not empty : 'filled'
+        $validator = Validator::make($request->input(), [
+            'name' => ['required', 'filled']
+        ]);
+
+            // Si validation ko
+        if ($validator->fails()) {
+            // si ko = code HTTP 422 avec un message d'erreur
+            return response()->json($validator->errors(), 422);
+        }
 
         // Extraction des valeurs passées de la body à la requête
         $name = $request->input('name');

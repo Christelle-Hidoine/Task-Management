@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
@@ -33,11 +34,24 @@ class TagController extends Controller
     // Création de la méthode create
     public function create(Request $request)
     {
-        // var_dump($request); die;
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input label
+        // avec l'outil Facade Validator on vérifie :
+            // existence de $label : 'required'
+            // not empty : 'filled'
+        $validator = Validator::make($request->input(), [
+            'label' => ['required', 'filled']
+        ]);
+
+            // Si validation ko
+        if ($validator->fails()) {
+            // si ko = code HTTP 422 avec un message d'erreur
+            return response()->json($validator->errors(), 422);
+        }
+
         // Extraction des valeurs passées de la body de la requête
         $label = $request->input('label');
 
-        // On crée une nouvelle instance, puis on lui définit la propriété name
+        // On crée une nouvelle instance, puis on lui définit la propriété label
         $tag = new Tag();
         $tag->label = $label;
 
@@ -54,10 +68,24 @@ class TagController extends Controller
         // recherche objet à modifier
         $tag = Tag::findOrFail($id);
 
+    // Dans la variable $validator, je mets le résultat d'une vérification de l'input label
+    // avec l'outil Facade Validator on vérifie :
+        // existence de $label : 'required'
+        // not empty : 'filled'
+        $validator = Validator::make($request->input(), [
+            'label' => ['required', 'filled']
+        ]);
+
+            // Si validation ko
+        if ($validator->fails()) {
+            // si ko = code HTTP 422 avec un message d'erreur
+            return response()->json($validator->errors(), 422);
+        }
+
         // Extraction des valeurs passées de la body à la requête
         $label = $request->input('label');
 
-        // set de la valeur de la propriété $name
+        // set de la valeur de la propriété $label
         $tag->label = $label;
 
         $tag->updateOrFail();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -33,7 +34,20 @@ class TaskController extends Controller
     // Création de la méthode create
     public function create(Request $request)
     {
-        // var_dump($request); die;
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input title
+        // avec l'outil Facade Validator on vérifie :
+            // existence de $title : 'required'
+            // not empty : 'filled'
+        $validator = Validator::make($request->input(), [
+            'title' => ['required', 'filled']
+        ]);
+
+            // Si validation ko
+        if ($validator->fails()) {
+            // si ko = code HTTP 422 avec un message d'erreur
+            return response()->json($validator->errors(), 422);
+        }
+
         // Extraction des valeurs passées de la body de la requête
         $title = $request->input('title');
 
@@ -53,6 +67,18 @@ class TaskController extends Controller
     {
         // recherche objet à modifier
         $task = Task::findOrFail($id);
+
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input title
+        // avec l'outil Facade Validator on vérifie :
+            // existence de $title : 'required'
+            // not empty : 'filled'
+            $validator = Validator::make($request->input(), [
+                'title' => ['required', 'filled']
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
 
         // Extraction des valeurs passées de la body à la requête
         $title = $request->input('title');
