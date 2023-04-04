@@ -11,7 +11,6 @@ apiConfiguration: {
         // on va chercher la liste des tâches actuellement enregistrées en BDD
         console.log('démarrage');
         taskList.init();
-        taskDelete.init();
         taskAdd.init();
         
     },

@@ -59,6 +59,12 @@ const taskList = {
         }
 
         // console.log('appel de la méthode handleLoadTasks');
+
+        // on appelle la méthode taskDelete.init() à la création de la div delete
+        taskDelete.init();
+
+        // on appelle la méthode taskEdit.init() à la création de la div edit
+        taskEdit.init();
     },
 
       /**

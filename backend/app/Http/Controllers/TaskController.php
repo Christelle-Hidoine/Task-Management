@@ -12,7 +12,7 @@ class TaskController extends Controller
     public function list()
     {
         // Utilisation de la méthode all() grâce à l'héritage
-        $tasks = Task::all();
+        $tasks = Task::all()->load('category'); // Récupérer la liste des films avec le nom de leur catégorie
         // Retour automatique au format JSON 👌
 
         if ($tasks) {
@@ -26,9 +26,10 @@ class TaskController extends Controller
     public function show($id)
     {
         // Utilisation de la méthode find($id) grâce à l'héritage
-        $task = Task::findOrFail($id);
+        $task = Task::findOrFail($id)->load('category'); // Récupérer la liste des films avec le nom de leur catégorie
         // Retour auto au format JSON
         return $task;
+        // return $task->category->name; renvoie le nom de la catégorie liée à cette tâche
     }
 
     // Création de la méthode create
