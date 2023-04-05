@@ -60,11 +60,6 @@ const taskList = {
 
         // console.log('appel de la méthode handleLoadTasks');
 
-        // on appelle la méthode taskDelete.init() à la création de la div delete
-        taskDelete.init();
-
-        // on appelle la méthode taskEdit.init() à la création de la div edit
-        taskEdit.init();
     },
 
       /**
@@ -96,11 +91,15 @@ const taskList = {
         const divDeleteElement = document.createElement('div');
         divDeleteElement.classList.add('delete');
         liElement.append(divDeleteElement);
+        // on appelle la méthode taskDelete.init() à la création de la div delete
+        taskDelete.init();
 
         // On crée un élément <div> pour le édit + ajout class edit + placement dans balise <li>
         const divEditElement = document.createElement('div');
         divEditElement.classList.add('edit');
         liElement.append(divEditElement);
+        // on appelle la méthode taskEdit.init() à la création de la div edit
+        taskEdit.init();
 
     },
 

@@ -12,7 +12,7 @@ class TaskController extends Controller
     public function list()
     {
         // Utilisation de la méthode all() grâce à l'héritage
-        $tasks = Task::all()->load('category'); // Récupérer la liste des films avec le nom de leur catégorie
+        $tasks = Task::all()->load('category', 'tags'); // Récupérer la liste des tasks avec le nom de leur catégorie + tags
         // Retour automatique au format JSON 👌
 
         if ($tasks) {
@@ -26,9 +26,15 @@ class TaskController extends Controller
     public function show($id)
     {
         // Utilisation de la méthode find($id) grâce à l'héritage
-        $task = Task::findOrFail($id)->load('category'); // Récupérer la liste des films avec le nom de leur catégorie
+        $task = Task::findOrFail($id)->load('category', 'tags'); // Récupérer la liste des tasks avec le nom de leur catégorie + tags
         // Retour auto au format JSON
+        // $tag = Tag::findOrFail($id);
+        // foreach ($tag->tasks as $task) {
+        //     return $task->tag;
+        // }
         return $task;
+
+        // return $task;
         // return $task->category->name; renvoie le nom de la catégorie liée à cette tâche
     }
 
@@ -96,7 +102,6 @@ class TaskController extends Controller
     {
         // recherche objet à modifier
         $task = Task::findOrFail($id);
-
         // suppression dans la BDD
         // réponse HTTP : 200 -> Delete
         // réponse HTTP : 500 -> Internal Server Error

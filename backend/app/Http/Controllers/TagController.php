@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +12,7 @@ class TagController extends Controller
     public function list ()
     {
         // Utilisation de la méthode all() grâce à l'héritage
-        $tags = Tag::all();
+        $tags = Tag::all()->load('tasks');
         // Retour automatique au format JSON 👌
 
         if ($tags) {
@@ -27,13 +26,13 @@ class TagController extends Controller
     public function show($id)
     {
         // Utilisation de la méthode find($id) grâce à l'héritage
-        // $tag = Tag::findOrFail($id);
+        $tag = Tag::findOrFail($id)->load('tasks');
         // Retour auto au format JSON
-        $task = Task::findOrFail($id);
-        foreach ($task->tags as $tag) {
-            return $tag;
-        }
-
+        // $task = Task::findOrFail($id);
+        // foreach ($task->tags as $tag) {
+        //     return $tag;
+        // }
+        return $tag;
     }
 
     // Création de la méthode create
