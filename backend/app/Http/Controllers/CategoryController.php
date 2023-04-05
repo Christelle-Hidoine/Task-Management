@@ -12,11 +12,11 @@ class CategoryController extends Controller
     public function list()
     {
         // Utilisation de la méthode all() grâce à l'héritage
-        $categories = Category::all();
+        $categories = Category::all()->load('tasks');
         // Retour automatique au format JSON 👌
 
         if ($categories) {
-            return $categories;
+            return $categories; // renvoie toutes les tâches liées à chaque catégory
         } else {
             return response(null, 404);
         }
@@ -26,9 +26,10 @@ class CategoryController extends Controller
     public function show($id)
     {
         // Utilisation de la méthode findOrFail() grâce à l'héritage
-        $category = Category::findOrFail($id);
+        $category = Category::findOrFail($id)->load('tasks');
         // Retour automatique au format JSON 👌
         return $category;
+        // return $category->tasks->name // renvoie toutes les tâches liées à une catégorie
     }
 
     // Création de la méthode create
