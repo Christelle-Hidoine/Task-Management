@@ -16,13 +16,16 @@ const taskAdd = {
     handleDisplayAddForm: async function() {
       
         taskAdd.addMode();
+        // taskAdd.addCategory();
 
+        // sélection du form
         const form = document.querySelector('form');
+        // Ecouteur d'événement submit sur le formulaire
         form.addEventListener('submit', taskAdd.handleCreateTask);
     },
 
     /**
-     * ajoute les class et attribut pour l'affichage de l'ajout/modification des tâches
+     * ajoute les class et attribut pour l'affichage de l'ajout/modification des tâches-catégorie
      */
     addMode: function() {
 
@@ -45,11 +48,11 @@ const taskAdd = {
     },
 
     /**
-     * handler permettant le traitement du formulaire et la récupération des données + envoi dans DB
+     * Handler permettant le traitement du formulaire 
      * @param {Event} event 
      */
     handleCreateTask: async function(event) {
-
+        // debugger;
         event.preventDefault();
         console.log(event);
         // on récupère l'élément cliqué
@@ -63,44 +66,112 @@ const taskAdd = {
             "title": data.get('title')
         };
 
-        const response = await fetch(app.apiConfiguration.endpoint + '/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newTaskJson)
-        });
-
-        if (response.status === 201) {
-            const success = document.querySelector('.success');
-            success.removeAttribute('hidden');
-            setTimeout(() => {
-                const success = document.querySelector('.success');
-                success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
-            }, 3000);
-            taskList.init();
-        }
-        else {
-            const danger = document.querySelector('.danger');
-            danger.removeAttribute('hidden');
-        }
+        taskAdd.addTaskDB(newTaskJson);
+        
     },
 
     /**
      * ajoute les class et attribut pour afficher la sélection de la catégorie dans le DOM
      */
     addCategory: async function() {
-        // création de l'input/select pour la catégorie
-        const input = document.createElement('label');
+        // debugger;
+        // création de la balise <label> 
+        const label = document.createElement('label');
+        // sélection du form
+        const form = document.querySelector('form > button');
+        // insertion de la balise <label> dans le form
+        form.before(label);
+        // attribut For
+        label.htmlFor ='category-select';
+        label.textContent = 'Choisissez une catégorie';
+        
+        // création de la balise <select>
+        const select = document.createElement('select');
+        // attribut name + id
+        select.setAttribute('name', 'category');
+        select.setAttribute('id', 'category');
+        // insertion de la balise <select> dans le form
+        form.before(select);
+
+        
+
+        // On récupère la liste des categories au format JSON
+        const categories = await taskAdd.getCategories();
+        console.log(categories);
+
+        // On boucle sur la liste des categories pour les insérer dans les options
+        for (const category of categories) {
+            // création de la balise <option>
+            const option = document.createElement('option');
+            // insertion de la balise <option> dans select
+            select.append(option);
+            option.value = category.categoryId;
+            option.textContent = category.categoryName;
+            }
+        
+    },
+
+    /**
+     * Charge la liste des catégories depuis notre projet backend api.php
+     */
+    getCategories: async function() {
+
+        // récupération des données de notre API dans le backend (cf app.js objet endpoint)
+        const response = await fetch(app.apiConfiguration.endpoint + '/categories');
+
+        // conversion de la réponse depuis le format json
+        let data = await response.json();
+        console.log(data);
+
+        // propriété tableau vide pour récupérer les categories de notre API (id & name)
+        const categoriesList = [];
+
+        for (const categorieFromApi of data) {
+            
+            // Je crée un objet qui contient les informations nécessaires d'une seule categorie
+            const categoryById = {
+              categoryId: categorieFromApi.id,
+              categoryName: categorieFromApi.name,
+            };
+
+        // j'ajoute chaque categorie avec name et id dans mon tableau vide    
+        categoriesList.push(categoryById);
+        }
+
+        // console.log(categoriesList);
+
+        return categoriesList;
 
     },
 
-    handleAddCategory: async function(event) {
-        event.preventDefault();
-        console.log(event);
+    /**
+     * Méthode pour ajouter une tâche dans la database
+     * @param {string} task 
+     */
+    addTaskDB: async function(task) {
 
-        const newCategory = event.currentTarget;
-        
-    }
+        const response = await fetch(app.apiConfiguration.endpoint + '/tasks',
+         {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task)
+        });
+
+        if (response.status === 201) {
+            taskList.init();
+            const success = document.querySelector('.success');
+            success.removeAttribute('hidden');
+            setTimeout(() => {
+                success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
+            }, 3000);
+        } else {
+            const danger = document.querySelector('.danger');
+            danger.removeAttribute('hidden');
+        }
+
+    },
+
 }
 

@@ -265,6 +265,27 @@ form input[type=text]:focus {
   text-indent: 0.3125rem;
 }
 
+form label {
+  border: 0.1875rem solid;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+  width: 100%;
+  margin-bottom: 2rem;
+  transition: text-indent 300ms;
+}
+
+form option {
+  border: 0.1875rem solid;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+  width: 100%;
+  margin-bottom: 2rem;
+  transition: text-indent 300ms;
+}
+
+
 /**
  * Modal
  */
