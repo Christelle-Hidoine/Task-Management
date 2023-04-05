@@ -25,7 +25,7 @@ const taskDelete = {
         // on supprime la tâche dans l'API selon l'id récupéré (et on stock la réponse du server dans response)
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks/' + currentId, {method: "DELETE",});
 
-        // si statut === 200 ou ok === true
+        // si status === 200 ou ok === true
         if (response.ok === true) {
         // on supprime la tâche <li> dans le DOM 
         currentTask.remove();
