@@ -1,7 +1,7 @@
 const taskList = {
 
     init: async function() {
-      taskList.displayTasks();
+     await taskList.displayTasks();
     },
 
     /**
@@ -14,8 +14,8 @@ const taskList = {
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks');
 
         // conversion de la réponse depuis le format json
-        const data = await response.json();
-        // console.log(data);
+        let data = await response.json();
+        console.log(data);
 
         // propriété tableau vide pour récupérer les tâches de notre API (id & title)
         const taskslist = [];
@@ -25,7 +25,9 @@ const taskList = {
             // Je crée un objet qui contient les informations nécessaires d'une seule tache
             const taskById = {
               id: taskFromAPI.id,
-              title: taskFromAPI.title
+              title: taskFromAPI.title,
+              categoryId: taskFromAPI.category?.id, // le ? permet de ne pas afficher la catégorie id si inexistante
+              categoryName: taskFromAPI.category?.name, // le ? permet de ne pas afficher la catégorie name si inexistante (null dans la BDD)
             };
 
         // j'ajoute chaque tache avec title et id dans mon tableau vide    
@@ -80,12 +82,19 @@ const taskList = {
         // On ajoute la <li> dans la <ul>
         ulElement.append(liElement);
 
-        // on crée la balise <p>
+        // on crée la balise <p> pour la tâche
         const titleElement = document.createElement('p');
-        // on rajoute le contenu dans la balise <p>
-        titleElement.textContent = task.title;
+        // on rajoute le contenu dans la balise <p> 
+        titleElement.textContent = task.title 
         // On insère la balise <p> dans la balise <li>
         liElement.append(titleElement);
+
+        // on crée une balise <em> avec la catégorie
+        const emElement = document.createElement('em');
+        // on rajoute le contenu à la balise <em>
+        emElement.textContent = task.categoryName;
+        // on place la balise <p> dans la <li>
+        liElement.append(emElement);
 
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>
         const divDeleteElement = document.createElement('div');
@@ -123,6 +132,7 @@ const taskList = {
         // modification de la class sur div .modal-dialog
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.remove('show');
+        
     },
 
     
