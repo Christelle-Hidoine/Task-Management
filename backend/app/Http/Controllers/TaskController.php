@@ -41,12 +41,13 @@ class TaskController extends Controller
     // Création de la méthode create
     public function create(Request $request)
     {
-        // Dans la variable $validator, je mets le résultat d'une vérification de l'input title
+        // Dans la variable $validator, je mets le résultat d'une vérification de l'input title et category_id
         // avec l'outil Facade Validator on vérifie :
-            // existence de $title : 'required'
+            // existence de $title et $category_id : 'required'
             // not empty : 'filled'
         $validator = Validator::make($request->input(), [
-            'title' => ['required', 'filled']
+            'title' => ['required', 'filled'],
+            'category_id' => ['required', 'filled']
         ]);
 
             // Si validation ko
@@ -57,10 +58,12 @@ class TaskController extends Controller
 
         // Extraction des valeurs passées de la body de la requête
         $title = $request->input('title');
+        $category_id = $request->input('category_id');
 
-        // On crée une nouvelle instance, puis on lui définit la propriété title
+        // On crée une nouvelle instance, puis on lui définit la propriété title et category_id
         $task = new Task();
         $task->title = $title;
+        $task->category_id = $category_id;
 
         // On sauvegarde, puis on gère la réponse avec le code HTTP qui convient
         // 201 : Created
@@ -80,7 +83,8 @@ class TaskController extends Controller
             // existence de $title : 'required'
             // not empty : 'filled'
             $validator = Validator::make($request->input(), [
-                'title' => ['required', 'filled']
+                'title' => ['required', 'filled'],
+                'category_id' => ['required', 'filled']
             ]);
 
             if ($validator->fails()) {
@@ -89,9 +93,11 @@ class TaskController extends Controller
 
         // Extraction des valeurs passées de la body à la requête
         $title = $request->input('title');
+        $category_id = $request->input('category_id');
 
-        // set de la valeur de la propriété $title
+        // set de la valeur de la propriété $title et $category_id
         $task->title = $title;
+        $task->category_id = $category_id;
 
         $task->updateOrFail();
         return $task;

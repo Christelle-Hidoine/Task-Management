@@ -16,8 +16,7 @@ const taskAdd = {
     handleDisplayAddForm: async function() {
       
         taskAdd.addMode();
-        // taskAdd.addCategory();
-
+        
         // sélection du form
         const form = document.querySelector('form');
         // Ecouteur d'événement submit sur le formulaire
@@ -45,6 +44,8 @@ const taskAdd = {
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.add('show');
 
+        taskAdd.addCategory();
+
     },
 
     /**
@@ -53,17 +54,18 @@ const taskAdd = {
      */
     handleCreateTask: async function(event) {
         // debugger;
-        event.preventDefault();
-        console.log(event);
+        // event.preventDefault();
+        // console.log(event);
         // on récupère l'élément cliqué
         const newTask = event.currentTarget;
         // on récupère la value de l'input avec FormData
-        const data = new FormData(newTask);
-        console.log(data.get('title'));
+        const dataTask = new FormData(newTask);
+        console.log(dataTask.get('title', 'category'));
 
         // on crée le nouvel objet à convertir en json
         const newTaskJson = {
-            "title": data.get('title')
+            "title": dataTask.get('title'),
+            "category_id": dataTask.get('category')
         };
 
         taskAdd.addTaskDB(newTaskJson);
@@ -75,38 +77,50 @@ const taskAdd = {
      */
     addCategory: async function() {
         // debugger;
-        // création de la balise <label> 
-        const label = document.createElement('label');
-        // sélection du form
-        const form = document.querySelector('form > button');
-        // insertion de la balise <label> dans le form
-        form.before(label);
-        // attribut For
-        label.htmlFor ='category-select';
-        label.textContent = 'Choisissez une catégorie';
-        
-        // création de la balise <select>
-        const select = document.createElement('select');
-        // attribut name + id
-        select.setAttribute('name', 'category');
-        select.setAttribute('id', 'category');
-        // insertion de la balise <select> dans le form
-        form.before(select);
-        
 
-        // On récupère la liste des categories au format JSON
-        const categories = await taskAdd.getCategories();
-        console.log(categories);
+        // condition si la partie category n'est pas dans le form => on l'ajoute
+        const labelCategory = document.querySelector('.label-category');
+        if (!labelCategory) {
 
-        // On boucle sur la liste des categories pour les insérer dans les options
-        for (const category of categories) {
-            // création de la balise <option>
-            const option = document.createElement('option');
-            // insertion de la balise <option> dans select
-            select.append(option);
-            option.value = category.categoryId;
-            option.textContent = category.categoryName;
-            }
+            // création d'une div
+            const div = document.createElement('div');
+            div.classList.add('tasklist');
+            // création de la balise <label> 
+            const label = document.createElement('label');
+            // sélection du form
+            const form = document.querySelector('form > button');
+            // insertion div dans le form
+            form.before(div);
+            // insertion de la balise <label> dans la div
+            div.append(label);
+            // attribut For
+            label.htmlFor ='category-select';
+            label.textContent = 'Choisissez une catégorie';
+            // class sur label
+            label.classList.add('label-category');
+            
+            // création de la balise <select>
+            const select = document.createElement('select');
+            // attribut name + id
+            select.setAttribute('name', 'category');
+            select.setAttribute('id', 'category');
+            // insertion de la balise <select> dans le form
+            div.append(select);
+
+            // On récupère la liste des categories au format JSON
+            const categories = await taskAdd.getCategories();
+            console.log(categories);
+
+            // On boucle sur la liste des categories pour les insérer dans les options
+            for (const category of categories) {
+                // création de la balise <option>
+                const option = document.createElement('option');
+                // insertion de la balise <option> dans select
+                select.append(option);
+                option.value = category.categoryId;
+                option.textContent = category.categoryName;
+                }
+        }
         
     },
 

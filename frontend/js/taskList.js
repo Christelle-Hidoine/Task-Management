@@ -1,7 +1,7 @@
 const taskList = {
 
     init: async function() {
-      taskList.displayTasks();
+     await taskList.displayTasks();
     },
 
     /**
@@ -89,17 +89,12 @@ const taskList = {
         // On insère la balise <p> dans la balise <li>
         liElement.append(titleElement);
 
-        // on crée une balise <p> pour la catégorie
-        const categoryElement = document.createElement('p');
         // on crée une balise <em> avec la catégorie
         const emElement = document.createElement('em');
         // on rajoute le contenu à la balise <em>
         emElement.textContent = task.categoryName;
-        // on insère la balise <em> dans <p>
-        categoryElement.append(emElement);
         // on place la balise <p> dans la <li>
-        liElement.append(categoryElement);
-        
+        liElement.append(emElement);
 
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>
         const divDeleteElement = document.createElement('div');
@@ -137,6 +132,7 @@ const taskList = {
         // modification de la class sur div .modal-dialog
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.remove('show');
+        
     },
 
     

@@ -285,6 +285,10 @@ form option {
   transition: text-indent 300ms;
 }
 
+.label-category, option {
+  margin : 0 3rem 0 3rem;
+}
+
 
 /**
  * Modal
