@@ -60,8 +60,11 @@ const taskList = {
         taskList.insertTaskInDom(task);
         }
 
-        // console.log('appel de la méthode handleLoadTasks');
+        // on appelle la méthode taskDelete.init() à la création de la div delete
+        await taskDelete.init();
 
+        // on appelle la méthode taskEdit.init() à la création de la div edit
+        await taskEdit.init();
     },
 
       /**
@@ -91,6 +94,8 @@ const taskList = {
 
         // on crée une balise <em> avec la catégorie
         const emElement = document.createElement('em');
+        // on rajoute le dataset id sur la catégorie
+        emElement.dataset.id = task.categoryId;
         // on rajoute le contenu à la balise <em>
         emElement.textContent = task.categoryName;
         // on place la balise <p> dans la <li>
@@ -100,15 +105,13 @@ const taskList = {
         const divDeleteElement = document.createElement('div');
         divDeleteElement.classList.add('delete');
         liElement.append(divDeleteElement);
-        // on appelle la méthode taskDelete.init() à la création de la div delete
-        taskDelete.init();
+        
 
         // On crée un élément <div> pour le édit + ajout class edit + placement dans balise <li>
         const divEditElement = document.createElement('div');
         divEditElement.classList.add('edit');
         liElement.append(divEditElement);
-        // on appelle la méthode taskEdit.init() à la création de la div edit
-        taskEdit.init();
+        
 
     },
 
