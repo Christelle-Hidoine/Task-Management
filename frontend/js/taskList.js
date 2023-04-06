@@ -26,8 +26,8 @@ const taskList = {
             const taskById = {
               id: taskFromAPI.id,
               title: taskFromAPI.title,
-              categoryId: taskFromAPI.category.id,
-              categoryName: taskFromAPI.category.name,
+              categoryId: taskFromAPI.category?.id, // le ? permet de ne pas afficher la catégorie id si inexistante
+              categoryName: taskFromAPI.category?.name, // le ? permet de ne pas afficher la catégorie name si inexistante (null dans la BDD)
             };
 
         // j'ajoute chaque tache avec title et id dans mon tableau vide    

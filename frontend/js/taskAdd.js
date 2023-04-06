@@ -92,7 +92,6 @@ const taskAdd = {
         select.setAttribute('id', 'category');
         // insertion de la balise <select> dans le form
         form.before(select);
-
         
 
         // On récupère la liste des categories au format JSON
