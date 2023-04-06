@@ -53,8 +53,8 @@ const taskAdd = {
      * @param {Event} event 
      */
     handleCreateTask: async function(event) {
-        // debugger;
-        // event.preventDefault();
+        debugger;
+        event.preventDefault();
         // console.log(event);
         // on récupère l'élément cliqué
         const newTask = event.currentTarget;
