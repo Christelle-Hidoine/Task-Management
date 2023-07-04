@@ -7,9 +7,7 @@ apiConfiguration: {
 
     init: async function() {
 
-        // debugger;
         // on va chercher la liste des tâches actuellement enregistrées en BDD
-        console.log('démarrage');
        await taskList.init();
        await taskAdd.init(); 
     },

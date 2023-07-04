@@ -15,7 +15,6 @@ const taskList = {
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
-        console.log(data);
 
         // propriété tableau vide pour récupérer les tâches de notre API (id & title)
         const taskslist = [];
@@ -30,11 +29,9 @@ const taskList = {
               categoryName: taskFromAPI.category?.name, // le ? permet de ne pas afficher la catégorie name si inexistante (null dans la BDD)
             };
 
-        // j'ajoute chaque tache avec title et id dans mon tableau vide    
-        taskslist.push(taskById);
+            // j'ajoute chaque tache avec title et id dans mon tableau vide    
+            taskslist.push(taskById);
         }
-
-        console.log(taskslist);
 
         return taskslist;
     },
@@ -52,9 +49,7 @@ const taskList = {
     
         // On récupère la liste des tâches au format JSON
         const tasks = await taskList.getTasks();
-
-        // console.log(tasks);
-    
+   
         // On boucle sur la liste des tâches pouyr les insérer dans la page
         for (const task of tasks) {
         taskList.insertTaskInDom(task);

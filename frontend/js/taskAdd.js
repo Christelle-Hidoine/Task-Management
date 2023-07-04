@@ -1,8 +1,6 @@
 const taskAdd = {
 
     init: async function() {
-        // debugger;
-        console.log('init taskAdd');
         
         // sélection du bouton Nouvelle Tâche
         const add = document.querySelector('.create-task-container > button');
@@ -53,14 +51,11 @@ const taskAdd = {
      * @param {Event} event 
      */
     handleCreateTask: async function(event) {
-        debugger;
         event.preventDefault();
-        // console.log(event);
         // on récupère l'élément cliqué
         const newTask = event.currentTarget;
         // on récupère la value de l'input avec FormData
         const dataTask = new FormData(newTask);
-        console.log(dataTask.get('title', 'category'));
 
         // on crée le nouvel objet à convertir en json
         const newTaskJson = {
@@ -76,8 +71,6 @@ const taskAdd = {
      * ajoute les class et attribut pour afficher la sélection de la catégorie dans le DOM
      */
     addCategory: async function() {
-        // debugger;
-
         // condition si la partie category n'est pas dans le form => on l'ajoute
         const labelCategory = document.querySelector('.label-category');
         if (!labelCategory) {
@@ -109,7 +102,6 @@ const taskAdd = {
 
             // On récupère la liste des categories au format JSON
             const categories = await taskAdd.getCategories();
-            console.log(categories);
 
             // On boucle sur la liste des categories pour les insérer dans les options
             for (const category of categories) {
@@ -134,7 +126,6 @@ const taskAdd = {
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
-        console.log(data);
 
         // propriété tableau vide pour récupérer les categories de notre API (id & name)
         const categoriesList = [];
@@ -150,8 +141,6 @@ const taskAdd = {
         // j'ajoute chaque categorie avec name et id dans mon tableau vide    
         categoriesList.push(categoryById);
         }
-
-        // console.log(categoriesList);
 
         return categoriesList;
 

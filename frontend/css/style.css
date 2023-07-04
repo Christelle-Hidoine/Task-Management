@@ -5,17 +5,18 @@
  * https://developer.mozilla.org/fr/docs/Web/CSS/Using_CSS_custom_properties
  */
 :root {
-  --color-canvas-default: rgb(255, 255, 255);
-  --color-canvas-subtle: rgba(255, 255, 255, 0.70);
+  --color-canvas-default: rgb(11, 12, 18);
+  --color-canvas-subtle: rgba(27, 29, 45, 0.7);
   --color-fg-default: rgb(44, 44, 44);
-  --color-neutral-subtle: rgb(239, 239, 239);
-  --color-neutral-muted: rgba(44, 44, 44, 0.5);
-  --color-border-subtle: rgba(44, 44, 44, 0.1);
+  --color-neutral-subtle: rgb(47, 49, 72);
+  --color-neutral-subtle-2: rgb(68, 71, 105);
+  --color-neutral-muted: rgba(255, 255, 255, 0.5);
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
   --color-success-subtle: #29ffcc;
   --color-danger-subtle: #ffac92;
-  --color-attention-subtle: #ffcd29;
+  --color-attention-subtle: #3f3970;
   --color-shadow-medium: 0 5px 0 rgba(44, 44, 44, 0.10);
-  --color-btn-primary-bg: rgb(44, 44, 44);
+  --color-btn-primary-bg: rgb(47, 49, 72);
   --color-btn-primary-text: #ffffff;
 }
 
@@ -25,6 +26,7 @@
 */
 *, *::before, *::after {
   box-sizing: border-box;
+  color: white;
 }
 
 * {
@@ -65,7 +67,8 @@ html {
 }
 
 body {
-  color: var(--color-fg-default);
+  color: var(--color-btn-primary-text);
+  background-color: var(--color-canvas-default);
 }
 
 /**
@@ -107,6 +110,10 @@ button {
   display: block;
   width: 100%;
   cursor: pointer;
+  transition: background-color linear 100ms;
+}
+button:hover {
+  background-color: var(--color-canvas-subtle);
 }
 button:active {
   transform: translateY(0.125rem);
@@ -186,10 +193,18 @@ button:active {
 .tasklist li:nth-of-type(odd) {
   background-color: var(--color-neutral-subtle);
 }
+.tasklist li:nth-of-type(even) {
+  background-color: var(--color-neutral-subtle-2);
+}
 .tasklist li p {
   flex: 1;
   padding: 1rem;
   font-size: 1.25rem;
+}
+.tasklist li p em {
+  display: block;
+  font-size: 1rem;
+  color: #cccccc;
 }
 .tasklist li .delete, .tasklist li .edit {
   background-repeat: no-repeat;
@@ -197,10 +212,12 @@ button:active {
   cursor: pointer;
   width: 3.125rem;
   border-left: 0.125rem solid var(--color-border-subtle);
-  opacity: 0.5;
+  opacity: 0.75;
+  transition: background-color linear 100ms;
 }
 .tasklist li .delete:hover, .tasklist li .edit:hover {
   opacity: 1;
+  background-color: var(--color-attention-subtle);
 }
 .tasklist li .delete:active, .tasklist li .edit:active {
   transform: translateY(0.125rem);
@@ -260,35 +277,11 @@ form input[type=text] {
   width: 100%;
   margin-bottom: 2rem;
   transition: text-indent 300ms;
+  color: var( --color-canvas-default )
 }
 form input[type=text]:focus {
   text-indent: 0.3125rem;
 }
-
-form label {
-  border: 0.1875rem solid;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1rem;
-  font-size: 1.25rem;
-  width: 100%;
-  margin-bottom: 2rem;
-  transition: text-indent 300ms;
-}
-
-form option {
-  border: 0.1875rem solid;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1rem;
-  font-size: 1.25rem;
-  width: 100%;
-  margin-bottom: 2rem;
-  transition: text-indent 300ms;
-}
-
-.label-category, option {
-  margin : 0 3rem 0 3rem;
-}
-
 
 /**
  * Modal
@@ -303,10 +296,35 @@ form option {
   display: none;
   align-items: center;
   justify-content: center;
+  background:rgb(13, 14, 23, 0.75)
 }
 .modal-dialog.show {
   display: flex;
 }
+
+.modal-dialog > form
+{
+  position: relative;
+}
+
+.modal-dialog > form > .modal-dialog-close-button
+{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 1rem;
+  background: var( --color-neutral-subtle );
+  border-radius: 0.2rem;
+  color: white;
+  transition: background-color linear 150ms;
+  cursor: pointer;
+}
+
+.modal-dialog > form > .modal-dialog-close-button:hover
+{
+  background: var( --color-canvas-subtle );
+}
+
 @media (max-width: 767.98px) {
   .modal-dialog form {
     width: 100%;

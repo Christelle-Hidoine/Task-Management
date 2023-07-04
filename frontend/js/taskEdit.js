@@ -1,8 +1,7 @@
 const taskEdit = {
     
     init: async function() {
-        // debugger;
-        console.log('init taskEdit');
+
         // sélection du bouton edit
         const edits = document.querySelectorAll('div.edit');
         // écouteur d'événement sur le bouton edit
