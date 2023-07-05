@@ -12,7 +12,7 @@
   --color-neutral-subtle-2: rgb(68, 71, 105);
   --color-neutral-muted: rgba(255, 255, 255, 0.5);
   --color-border-subtle: rgba(255, 255, 255, 0.1);
-  --color-success-subtle: #29ffcc;
+  --color-success-subtle: #149375;
   --color-danger-subtle: #ffac92;
   --color-attention-subtle: #3f3970;
   --color-shadow-medium: 0 5px 0 rgba(44, 44, 44, 0.10);
@@ -166,12 +166,21 @@ button:active {
   list-style: none;
   padding-left: 0;
 }
+
+@media (max-width: 580px) {
+  .tasklist {
+    margin-top: 0;
+    padding-bottom: 1.5rem;
+  }
+}
+
 @media (max-width: 767.98px) {
   .tasklist {
     margin-top: 3rem;
     padding-bottom: 6.25rem;
   }
 }
+
 @media (min-width: 768px) {
   .tasklist {
     margin-left: auto;
@@ -201,6 +210,13 @@ button:active {
   padding: 1rem;
   font-size: 1.25rem;
 }
+
+@media (max-width: 460px) {
+  .tasklist li p {
+    font-size : 1rem;
+  }
+}
+
 .tasklist li p em {
   display: block;
   font-size: 1rem;
@@ -227,6 +243,9 @@ button:active {
 }
 .tasklist li .edit {
   background-image: url(../img/edit.png);
+}
+.tasklist li em {
+  padding: 1.2em;
 }
 
 /**
@@ -281,6 +300,31 @@ form input[type=text] {
 }
 form input[type=text]:focus {
   text-indent: 0.3125rem;
+}
+
+/**
+ * Category
+ */
+#task-category {
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  font-size : 1.2em;
+  width: 55%;
+  color: black;
+}
+#task-category option {
+  color: black;
+}
+.label-category {
+  margin-right: 3em;
+  font-size : 1.2em;
+  font-style: italic;
+}
+
+@media (max-width: 580px) {
+  .label-category {
+    font-size : 1em;
+  }
 }
 
 /**

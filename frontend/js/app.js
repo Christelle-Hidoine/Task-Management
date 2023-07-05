@@ -9,7 +9,7 @@ apiConfiguration: {
 
         // on va chercher la liste des tâches actuellement enregistrées en BDD
        await taskList.init();
-       await taskAdd.init(); 
+
     },
 
 };

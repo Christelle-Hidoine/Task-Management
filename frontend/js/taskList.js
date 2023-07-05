@@ -1,7 +1,11 @@
 const taskList = {
 
     init: async function() {
-     await taskList.displayTasks();
+        await taskList.displayTasks();
+        // sélection du bouton Nouvelle Tâche
+        const addTask = document.querySelector('.create-task-container > button');
+        // écouteur d'événement sur le bouton Nouvelle Tâche
+        addTask.addEventListener('click', taskAdd.init);
     },
 
     /**
@@ -40,9 +44,6 @@ const taskList = {
     * Méthode pour afficher la liste des tâches lors du chargement de la page
     */
     displayTasks: async function() {
-
-        // on reset les class et attribut
-        taskList.defaultMode();
 
         // On vide la liste des tâches sur la page
         document.querySelector(".tasklist").textContent = "";
@@ -107,13 +108,15 @@ const taskList = {
         divEditElement.classList.add('edit');
         liElement.append(divEditElement);
         
-
     },
 
      /**
-     * reset les class et attribut pour l'affichage de la list des tâches
+     * reset les class et attribut pour l'affichage de la liste des tâches
      */
     defaultMode: function() {
+
+        // On vide la liste des tâches sur la page
+        document.querySelector(".tasklist").textContent = "";
 
         // modification de la class sur header
         const headerElement = document.querySelector('header');

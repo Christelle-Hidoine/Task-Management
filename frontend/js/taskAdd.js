@@ -2,10 +2,7 @@ const taskAdd = {
 
     init: async function() {
         
-        // sélection du bouton Nouvelle Tâche
-        const add = document.querySelector('.create-task-container > button');
-        // écouteur d'événement sur le Nouvelle Tâche
-        add.addEventListener('click', taskAdd.handleDisplayAddForm);
+        taskAdd.handleDisplayAddForm();
     },
 
     /**
@@ -13,12 +10,19 @@ const taskAdd = {
      */
     handleDisplayAddForm: async function() {
       
+        const button = document.querySelector('form > button');
+        button.textContent = "Ajouter";
+
         taskAdd.addMode();
         
         // sélection du form
         const form = document.querySelector('form');
         // Ecouteur d'événement submit sur le formulaire
         form.addEventListener('submit', taskAdd.handleCreateTask);
+
+        const closeModal = document.querySelector('.modal-dialog-close-button');
+        closeModal.addEventListener('click', taskEdit.handleCloseModal);
+        
     },
 
     /**
@@ -51,6 +55,7 @@ const taskAdd = {
      * @param {Event} event 
      */
     handleCreateTask: async function(event) {
+
         event.preventDefault();
         // on récupère l'élément cliqué
         const newTask = event.currentTarget;
@@ -60,11 +65,10 @@ const taskAdd = {
         // on crée le nouvel objet à convertir en json
         const newTaskJson = {
             "title": dataTask.get('title'),
-            "category_id": dataTask.get('category')
+            "category_id": dataTask.get('category_id')
         };
-
+    
         taskAdd.addTaskDB(newTaskJson);
-        
     },
 
     /**
@@ -87,7 +91,7 @@ const taskAdd = {
             // insertion de la balise <label> dans la div
             div.append(label);
             // attribut For
-            label.htmlFor ='category-select';
+            label.htmlFor ='task-category';
             label.textContent = 'Choisissez une catégorie';
             // class sur label
             label.classList.add('label-category');
@@ -95,8 +99,8 @@ const taskAdd = {
             // création de la balise <select>
             const select = document.createElement('select');
             // attribut name + id
-            select.setAttribute('name', 'category');
-            select.setAttribute('id', 'category');
+            select.setAttribute('name', 'category_id');
+            select.setAttribute('id', 'task-category');
             // insertion de la balise <select> dans le form
             div.append(select);
 
@@ -151,7 +155,7 @@ const taskAdd = {
      * @param {string} task 
      */
     addTaskDB: async function(task) {
-
+        debugger;
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks',
          {
             method: 'POST',
@@ -164,10 +168,12 @@ const taskAdd = {
         if (response.status === 201) {
             taskList.init();
             const success = document.querySelector('.success');
+            success.textContent = "La nouvelle tâche a bien été ajoutée";
             success.removeAttribute('hidden');
             setTimeout(() => {
                 success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
             }, 3000);
+            taskList.defaultMode();
         } else {
             const danger = document.querySelector('.danger');
             danger.removeAttribute('hidden');
