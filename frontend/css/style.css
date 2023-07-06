@@ -179,6 +179,10 @@ button:active {
     margin-top: 3rem;
     padding-bottom: 6.25rem;
   }
+  .tasklist li span {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 @media (min-width: 768px) {
@@ -247,6 +251,16 @@ button:active {
 .tasklist li em {
   padding: 1.2em;
 }
+
+.tasklist li span {
+  background-color: var(--color-attention-subtle);
+  border: 2px solid;
+  border-radius: 20%;
+  height: fit-content;
+  padding: 0.5em;
+  margin: 0.3em;
+}
+
 
 /**
  * Create task container

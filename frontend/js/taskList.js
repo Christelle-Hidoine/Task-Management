@@ -18,7 +18,6 @@ const taskList = {
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
-
         return data;
     },
 
@@ -79,8 +78,21 @@ const taskList = {
         emElement.dataset.id = task.category?.id;
         // on rajoute le contenu à la balise <em>
         emElement.textContent = task.category?.name;
-        // on place la balise <p> dans la <li>
+        // on place la balise <em> dans la <li>
         liElement.append(emElement);
+
+        const tags = task.tags;
+
+        tags.forEach(function(tag) {
+            // on crée une balise <span> avec le tag
+            const spanElement = document.createElement('span');
+            // on rajoute le dataset id sur le tag
+            spanElement.dataset.id = tag?.id;
+            // on rajoute le contenu à la balise <span>
+            spanElement.textContent = tag?.label;
+            // on place la balise <span> dans la <li>
+            liElement.append(spanElement);
+        });
     
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>
         const divDeleteElement = document.createElement('div');
