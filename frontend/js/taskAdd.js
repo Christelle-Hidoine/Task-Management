@@ -2,7 +2,7 @@ const taskAdd = {
 
     init: async function() {
         
-        taskAdd.handleDisplayAddForm();
+        await taskAdd.handleDisplayAddForm();
     },
 
     /**
@@ -13,13 +13,8 @@ const taskAdd = {
         const button = document.querySelector('form > button');
         button.textContent = "Ajouter";
 
-        taskAdd.addMode();
+        await taskAdd.addMode();
         
-        // sélection du form
-        const form = document.querySelector('form');
-        // Ecouteur d'événement submit sur le formulaire
-        form.addEventListener('submit', taskAdd.handleCreateTask);
-
         const closeModal = document.querySelector('.modal-dialog-close-button');
         closeModal.addEventListener('click', taskEdit.handleCloseModal);
         
@@ -28,7 +23,7 @@ const taskAdd = {
     /**
      * ajoute les class et attribut pour l'affichage de l'ajout/modification des tâches-catégorie
      */
-    addMode: function() {
+    addMode: async function() {
 
         // modification de la class sur header
         const headerElement = document.querySelector('header');
@@ -46,31 +41,11 @@ const taskAdd = {
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.add('show');
 
-        taskAdd.addCategory();
+        await taskAdd.addCategory();
 
     },
 
-    /**
-     * Handler permettant le traitement du formulaire 
-     * @param {Event} event 
-     */
-    handleCreateTask: async function(event) {
-
-        event.preventDefault();
-        // on récupère l'élément cliqué
-        const newTask = event.currentTarget;
-        // on récupère la value de l'input avec FormData
-        const dataTask = new FormData(newTask);
-
-        // on crée le nouvel objet à convertir en json
-        const newTaskJson = {
-            "title": dataTask.get('title'),
-            "category_id": dataTask.get('category_id')
-        };
     
-        taskAdd.addTaskDB(newTaskJson);
-    },
-
     /**
      * ajoute les class et attribut pour afficher la sélection de la catégorie dans le DOM
      */
@@ -155,7 +130,7 @@ const taskAdd = {
      * @param {string} task 
      */
     addTaskDB: async function(task) {
-        debugger;
+
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks',
          {
             method: 'POST',
@@ -165,18 +140,19 @@ const taskAdd = {
             body: JSON.stringify(task)
         });
 
-        if (response.status === 201) {
-            taskList.init();
+        if (response.status !== 201) {
+            const danger = document.querySelector('.danger');
+            danger.removeAttribute('hidden');
+            setTimeout(() => {
+                danger.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
+            }, 3000);
+        } else {
             const success = document.querySelector('.success');
             success.textContent = "La nouvelle tâche a bien été ajoutée";
             success.removeAttribute('hidden');
             setTimeout(() => {
                 success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
             }, 3000);
-            taskList.defaultMode();
-        } else {
-            const danger = document.querySelector('.danger');
-            danger.removeAttribute('hidden');
         }
 
     },

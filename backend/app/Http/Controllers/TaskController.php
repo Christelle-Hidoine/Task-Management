@@ -47,7 +47,6 @@ class TaskController extends Controller
             // not empty : 'filled'
         $validator = Validator::make($request->input(), [
             'title' => ['required', 'filled'],
-            'category_id' => ['required', 'filled']
         ]);
 
             // Si validation ko
@@ -59,17 +58,20 @@ class TaskController extends Controller
         // Extraction des valeurs passées de la body de la requête
         $title = $request->input('title');
         $category_id = $request->input('category_id');
+        $tags = $request->input('tags');
 
         // On crée une nouvelle instance, puis on lui définit la propriété title et category_id
         $task = new Task();
         $task->title = $title;
         $task->category_id = $category_id;
+        $task->tags()->sync($tags);
 
         // On sauvegarde, puis on gère la réponse avec le code HTTP qui convient
         // 201 : Created
         // 500 : Internal Server Error
         $task->saveOrFail();
         return $task;
+
     }
 
     // Méthode pour modifier les propriétés correspondant à 1 id dans la bdd
@@ -84,7 +86,6 @@ class TaskController extends Controller
             // not empty : 'filled'
             $validator = Validator::make($request->input(), [
                 'title' => ['required', 'filled'],
-                'category_id' => ['required', 'filled']
             ]);
 
             if ($validator->fails()) {
@@ -94,10 +95,12 @@ class TaskController extends Controller
         // Extraction des valeurs passées de la body à la requête
         $title = $request->input('title');
         $category_id = $request->input('category_id');
+        $tags = $request->input('tags');
 
         // set de la valeur de la propriété $title et $category_id
         $task->title = $title;
         $task->category_id = $category_id;
+        $task->tags()->sync($tags);
 
         $task->updateOrFail();
         return $task;

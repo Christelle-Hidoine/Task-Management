@@ -13,41 +13,24 @@ const taskList = {
      */
     getTasks: async function() {
 
-        // debugger;
         // récupération des données de notre API dans le backend (cf app.js objet endpoint)
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks');
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
 
-        // propriété tableau vide pour récupérer les tâches de notre API (id & title)
-        const taskslist = [];
-
-        for (const taskFromAPI of data) {
-            
-            // Je crée un objet qui contient les informations nécessaires d'une seule tache
-            const taskById = {
-              id: taskFromAPI.id,
-              title: taskFromAPI.title,
-              categoryId: taskFromAPI.category?.id, // le ? permet de ne pas afficher la catégorie id si inexistante
-              categoryName: taskFromAPI.category?.name, // le ? permet de ne pas afficher la catégorie name si inexistante (null dans la BDD)
-            };
-
-            // j'ajoute chaque tache avec title et id dans mon tableau vide    
-            taskslist.push(taskById);
-        }
-
-        return taskslist;
+        return data;
     },
 
     /**
     * Méthode pour afficher la liste des tâches lors du chargement de la page
     */
     displayTasks: async function() {
+ 
+        // on supprime tout ce qu'il y a dans le <ul>
+        const taskListElement = document.querySelector('.tasklist');
+        taskListElement.textContent = '';
 
-        // On vide la liste des tâches sur la page
-        document.querySelector(".tasklist").textContent = "";
-    
         // On récupère la liste des tâches au format JSON
         const tasks = await taskList.getTasks();
    
@@ -69,6 +52,7 @@ const taskList = {
      * @param {Object} task
      */
     insertTaskInDom: function(task) {
+ 
         // On créé un <li>
         const liElement = document.createElement("li");
 
@@ -90,19 +74,19 @@ const taskList = {
 
         // on crée une balise <em> avec la catégorie
         const emElement = document.createElement('em');
+
         // on rajoute le dataset id sur la catégorie
-        emElement.dataset.id = task.categoryId;
+        emElement.dataset.id = task.category?.id;
         // on rajoute le contenu à la balise <em>
-        emElement.textContent = task.categoryName;
+        emElement.textContent = task.category?.name;
         // on place la balise <p> dans la <li>
         liElement.append(emElement);
-
+    
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>
         const divDeleteElement = document.createElement('div');
         divDeleteElement.classList.add('delete');
         liElement.append(divDeleteElement);
         
-
         // On crée un élément <div> pour le édit + ajout class edit + placement dans balise <li>
         const divEditElement = document.createElement('div');
         divEditElement.classList.add('edit');
@@ -114,9 +98,6 @@ const taskList = {
      * reset les class et attribut pour l'affichage de la liste des tâches
      */
     defaultMode: function() {
-
-        // On vide la liste des tâches sur la page
-        document.querySelector(".tasklist").textContent = "";
 
         // modification de la class sur header
         const headerElement = document.querySelector('header');

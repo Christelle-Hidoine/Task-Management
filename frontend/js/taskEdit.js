@@ -14,7 +14,7 @@ const taskEdit = {
      * Handler permettant d'afficher le formulaire de modification de tâche
      */
     handleDisplayEditForm: async function(event) {
-      
+
         const currentTask = event.currentTarget.parentNode;
         // récupération de l'id de la tâche
         const taskId = currentTask.dataset.id;
@@ -26,7 +26,7 @@ const taskEdit = {
         const taskCategoryId = taskCategoryName.dataset.id;
         
         // on passe en mode formulaire edit/add
-        taskAdd.addMode();
+        await taskAdd.addMode();
 
         const closeModal = document.querySelector('.modal-dialog-close-button');
         closeModal.addEventListener('click', taskEdit.handleCloseModal);
@@ -51,62 +51,41 @@ const taskEdit = {
 
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.remove('show');
-        const form = document.querySelector('form');
-        form.querySelector('#task-title').value = "";
-        form.querySelector('#task-id').value = "";
-        form.querySelector('select[name="category_id"]').value = "";
         taskList.defaultMode();
-        taskList.init();
     },
 
     /**
-     * Handler permettant de traiter le formulaire
-     * @param {Event} event 
+     * Méthode pour modifier une tâche dans la DB
+     * 
+     * @param {number} taskId 
+     * @param {Object} task (title and id)
      */
-    handleUpdateTask: async function (event) {
-        
-        if (event.submitter.textContent == 'Modifier') {
-            event.preventDefault();
-        
-            const updateTask = event.currentTarget; 
-            const updateData = new FormData(updateTask); 
-            const taskId = updateData.get('id');
-            
-            // on crée le nouvel objet à convertir en json
-            const updateTaskJson = {
-                "title": updateData.get('title'),
-                "category_id": updateData.get('category_id')
-            };
-        
-            const response = await fetch(
-                app.apiConfiguration.endpoint + '/tasks/' + taskId,
-                {
-                    method: 'PUT',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(updateTaskJson)
-                }
-            );
-        
-            if (response.status === 200) {
-                taskList.init();
-                const success = document.querySelector('.success');
-                success.textContent = "La tâche a bien été modifiée";
-                success.removeAttribute('hidden');
-                setTimeout(() => {
-                    success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
-                }, 3000);
-            } else {
-                const danger = document.querySelector('.danger');
-                danger.removeAttribute('hidden');
-                setTimeout(() => {
-                    danger.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
-                }, 3000);
+    editTaskDB: async function(taskId = null, task) {
+
+        const response = await fetch(
+            app.apiConfiguration.endpoint + '/tasks/' + taskId,
+            {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(task)
             }
-        }
-        else {
-            taskAdd.handleCreateTask(event);
+        );
+    
+        if (response.ok === false) {
+            const danger = document.querySelector('.danger');
+            danger.removeAttribute('hidden');
+            setTimeout(() => {
+                danger.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
+            }, 3000);
+        } else {
+            const success = document.querySelector('.success');
+            success.textContent = "La tâche a bien été modifiée";
+            success.removeAttribute('hidden');
+            setTimeout(() => {
+                success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
+            }, 3000);
         }
     }
 
