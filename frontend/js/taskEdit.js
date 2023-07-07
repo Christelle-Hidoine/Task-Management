@@ -11,6 +11,74 @@ const taskEdit = {
     },
 
     /**
+     * Charge la liste des tags
+     */
+    getTags: async function() {
+        // récupération des données
+        const response = await fetch(app.apiConfiguration.endpoint + '/tags');
+
+        let data = await response.json();
+
+        const tagsList = [];
+
+        for (const tag of data) {
+            const tagById = {
+                tagId: tag.id,
+                tagLabel: tag.label,
+            };
+
+        tagsList.push(tagById);
+        }
+
+        return tagsList;
+    },
+
+    /**
+     * Ajoute les class et attribut pour afficher la sélection de tag dans le formulaire
+     */
+    addTags: async function() {
+        // condition si la partie tag n'est pas dans le form on l'ajoute
+        const tagField = document.querySelector('fieldset');
+        if (!tagField) {
+
+            // création de la balise <fieldset>
+            const fieldset = document.createElement('fieldset');
+            // création de la balise <legend>
+            const legend = document.createElement('legend');
+            legend.textContent = "Choisissez un tag";
+            legend.classList.add("label-category");
+            // insertion legend dans fieldset
+            fieldset.append(legend);
+            
+            // sélection du form
+            const form = document.querySelector('form > button');
+            // insertion fieldset dans le form
+            form.before(fieldset);
+            
+            // On récupère la liste des tags au format JSON
+            const tags = await taskEdit.getTags();
+
+            for (const tag of tags) {
+                // création d'une div dans le fieldset
+                const div = document.createElement('div');
+                fieldset.append(div);
+                // création de la balise <input> dans la div
+                const input = document.createElement('input');
+                input.setAttribute('id', tag.tagLabel);
+                input.setAttribute('type', 'checkbox');
+                input.setAttribute('name', 'tags');
+                input.value = tag.tagId;
+                div.append(input);
+                // création de la balise <label> dans la div
+                const label = document.createElement('label');
+                label.htmlFor = tag.tagLabel
+                label.textContent = tag.tagLabel;
+                div.append(label);
+            }
+        }
+    },
+
+    /**
      * Handler permettant d'afficher le formulaire de modification de tâche
      */
     handleDisplayEditForm: async function(event) {
@@ -24,9 +92,19 @@ const taskEdit = {
         const taskCategoryName = currentTask.querySelector('em');
         // récupération de l'id de la catégorie
         const taskCategoryId = taskCategoryName.dataset.id;
+
+        // récupération de l'id du tag
+        const taskTags = currentTask.querySelectorAll('span');
+        tagNameList = [];
+        taskTags.forEach(function(tag) {
+            const taskName = tag.textContent;
+            tagNameList.push(taskName);
+        });
         
         // on passe en mode formulaire edit/add
         await taskAdd.addMode();
+
+        await taskEdit.addTags();
 
         const closeModal = document.querySelector('.modal-dialog-close-button');
         closeModal.addEventListener('click', taskEdit.handleCloseModal);
@@ -40,8 +118,13 @@ const taskEdit = {
         form.querySelector('#task-id').value = taskId;
         form.querySelector('select[name="category_id"]').value = taskCategoryId;
 
-        // Ecouteur d'événement submit sur le formulaire
-        form.addEventListener('submit', taskEdit.handleUpdateTask);
+        tagNameList.forEach(function(tag) {
+            const inputTag = document.getElementById(tag);
+            if (inputTag) {
+                inputTag.setAttribute('checked', true);
+            }
+        })
+
     },
 
     /**
@@ -52,6 +135,12 @@ const taskEdit = {
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.remove('show');
         taskList.defaultMode();
+        const form = document.querySelector('form');
+        form.reset();
+        const inputChecked = document.querySelectorAll('[checked]');
+        inputChecked.forEach(function(input){
+            input.removeAttribute('checked');
+        })
     },
 
     /**

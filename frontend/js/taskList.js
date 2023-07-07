@@ -74,12 +74,20 @@ const taskList = {
         // on crée une balise <em> avec la catégorie
         const emElement = document.createElement('em');
 
+        // on crée une balise <div> pour y insérer la catégorie et les tags
+        const divElement = document.createElement('div');
+
+        // on ajoute la class tag-category
+        divElement.classList.add('tag-category');
+
         // on rajoute le dataset id sur la catégorie
         emElement.dataset.id = task.category?.id;
         // on rajoute le contenu à la balise <em>
         emElement.textContent = task.category?.name;
-        // on place la balise <em> dans la <li>
-        liElement.append(emElement);
+        // on place la balise <em> dans la <div>
+        divElement.append(emElement);
+        // on place la balise <div> dans la <li>
+        liElement.append(divElement);
 
         const tags = task.tags;
 
@@ -91,7 +99,7 @@ const taskList = {
             // on rajoute le contenu à la balise <span>
             spanElement.textContent = tag?.label;
             // on place la balise <span> dans la <li>
-            liElement.append(spanElement);
+            divElement.append(spanElement);
         });
     
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>

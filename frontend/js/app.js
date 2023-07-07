@@ -29,11 +29,12 @@ apiConfiguration: {
         const newTask = event.currentTarget;
         // on récupère la value de l'input avec FormData
         const dataTask = new FormData(newTask);
-
+      
         // on crée le nouvel objet à convertir en json
         const newTaskJson = {
             "title": dataTask.get('title'),
-            "category_id": dataTask.get('category_id')
+            "category_id": dataTask.get('category_id'),
+            "tags": dataTask.getAll('tags'),
         };
 
         // on récupère l'id : 
@@ -55,9 +56,6 @@ apiConfiguration: {
         // affichage de la liste mise à jour avec la nouvelle tâche
         await taskList.init();
 
-        // reset des valeurs du formulaire
-        const form = document.querySelector('form');
-        form.reset();
     }
 
 };
