@@ -2,6 +2,7 @@ POST http://127.0.0.1:8000/api/tasks HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "test staatus ",
-    "category_id": "2"
+  "title": "Tester les tags",
+  "category_id": 2,
+  "tag_id":[1, 146]
 }

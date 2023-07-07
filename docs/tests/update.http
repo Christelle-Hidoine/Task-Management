@@ -1,7 +1,8 @@
-PUT http://127.0.0.1:8000/api/tasks/8 HTTP/1.1
+PUT http://127.0.0.1:8000/api/tasks/1 HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "changer la tâche",
-    "category_id": "3"
+  "title": "Acheter une salade",
+  "category_id": 4,
+  "tags": 1
 }

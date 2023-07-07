@@ -1,7 +1,11 @@
 const taskList = {
 
     init: async function() {
-     await taskList.displayTasks();
+        await taskList.displayTasks();
+        // sélection du bouton Nouvelle Tâche
+        const addTask = document.querySelector('.create-task-container > button');
+        // écouteur d'événement sur le bouton Nouvelle Tâche
+        addTask.addEventListener('click', taskAdd.init);
     },
 
     /**
@@ -9,52 +13,26 @@ const taskList = {
      */
     getTasks: async function() {
 
-        // debugger;
         // récupération des données de notre API dans le backend (cf app.js objet endpoint)
         const response = await fetch(app.apiConfiguration.endpoint + '/tasks');
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
-        console.log(data);
-
-        // propriété tableau vide pour récupérer les tâches de notre API (id & title)
-        const taskslist = [];
-
-        for (const taskFromAPI of data) {
-            
-            // Je crée un objet qui contient les informations nécessaires d'une seule tache
-            const taskById = {
-              id: taskFromAPI.id,
-              title: taskFromAPI.title,
-              categoryId: taskFromAPI.category?.id, // le ? permet de ne pas afficher la catégorie id si inexistante
-              categoryName: taskFromAPI.category?.name, // le ? permet de ne pas afficher la catégorie name si inexistante (null dans la BDD)
-            };
-
-        // j'ajoute chaque tache avec title et id dans mon tableau vide    
-        taskslist.push(taskById);
-        }
-
-        console.log(taskslist);
-
-        return taskslist;
+        return data;
     },
 
     /**
     * Méthode pour afficher la liste des tâches lors du chargement de la page
     */
     displayTasks: async function() {
+ 
+        // on supprime tout ce qu'il y a dans le <ul>
+        const taskListElement = document.querySelector('.tasklist');
+        taskListElement.textContent = '';
 
-        // on reset les class et attribut
-        taskList.defaultMode();
-
-        // On vide la liste des tâches sur la page
-        document.querySelector(".tasklist").textContent = "";
-    
         // On récupère la liste des tâches au format JSON
         const tasks = await taskList.getTasks();
-
-        // console.log(tasks);
-    
+   
         // On boucle sur la liste des tâches pouyr les insérer dans la page
         for (const task of tasks) {
         taskList.insertTaskInDom(task);
@@ -73,6 +51,7 @@ const taskList = {
      * @param {Object} task
      */
     insertTaskInDom: function(task) {
+ 
         // On créé un <li>
         const liElement = document.createElement("li");
 
@@ -94,29 +73,49 @@ const taskList = {
 
         // on crée une balise <em> avec la catégorie
         const emElement = document.createElement('em');
-        // on rajoute le dataset id sur la catégorie
-        emElement.dataset.id = task.categoryId;
-        // on rajoute le contenu à la balise <em>
-        emElement.textContent = task.categoryName;
-        // on place la balise <p> dans la <li>
-        liElement.append(emElement);
 
+        // on crée une balise <div> pour y insérer la catégorie et les tags
+        const divElement = document.createElement('div');
+
+        // on ajoute la class tag-category
+        divElement.classList.add('tag-category');
+
+        // on rajoute le dataset id sur la catégorie
+        emElement.dataset.id = task.category?.id;
+        // on rajoute le contenu à la balise <em>
+        emElement.textContent = task.category?.name;
+        // on place la balise <em> dans la <div>
+        divElement.append(emElement);
+        // on place la balise <div> dans la <li>
+        liElement.append(divElement);
+
+        const tags = task.tags;
+
+        tags.forEach(function(tag) {
+            // on crée une balise <span> avec le tag
+            const spanElement = document.createElement('span');
+            // on rajoute le dataset id sur le tag
+            spanElement.dataset.id = tag?.id;
+            // on rajoute le contenu à la balise <span>
+            spanElement.textContent = tag?.label;
+            // on place la balise <span> dans la <li>
+            divElement.append(spanElement);
+        });
+    
         // On crée un élément <div> pour le delete + ajout class delete + placement dans balise <li>
         const divDeleteElement = document.createElement('div');
         divDeleteElement.classList.add('delete');
         liElement.append(divDeleteElement);
         
-
         // On crée un élément <div> pour le édit + ajout class edit + placement dans balise <li>
         const divEditElement = document.createElement('div');
         divEditElement.classList.add('edit');
         liElement.append(divEditElement);
         
-
     },
 
      /**
-     * reset les class et attribut pour l'affichage de la list des tâches
+     * reset les class et attribut pour l'affichage de la liste des tâches
      */
     defaultMode: function() {
 

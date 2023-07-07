@@ -1,13 +1,8 @@
 const taskAdd = {
 
     init: async function() {
-        // debugger;
-        console.log('init taskAdd');
         
-        // sélection du bouton Nouvelle Tâche
-        const add = document.querySelector('.create-task-container > button');
-        // écouteur d'événement sur le Nouvelle Tâche
-        add.addEventListener('click', taskAdd.handleDisplayAddForm);
+        await taskAdd.handleDisplayAddForm();
     },
 
     /**
@@ -15,18 +10,20 @@ const taskAdd = {
      */
     handleDisplayAddForm: async function() {
       
-        taskAdd.addMode();
+        const button = document.querySelector('form > button');
+        button.textContent = "Ajouter";
+
+        await taskAdd.addMode();
         
-        // sélection du form
-        const form = document.querySelector('form');
-        // Ecouteur d'événement submit sur le formulaire
-        form.addEventListener('submit', taskAdd.handleCreateTask);
+        const closeModal = document.querySelector('.modal-dialog-close-button');
+        closeModal.addEventListener('click', taskEdit.handleCloseModal);
+        
     },
 
     /**
      * ajoute les class et attribut pour l'affichage de l'ajout/modification des tâches-catégorie
      */
-    addMode: function() {
+    addMode: async function() {
 
         // modification de la class sur header
         const headerElement = document.querySelector('header');
@@ -44,40 +41,15 @@ const taskAdd = {
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.add('show');
 
-        taskAdd.addCategory();
+        await taskAdd.addCategory();
 
     },
 
-    /**
-     * Handler permettant le traitement du formulaire 
-     * @param {Event} event 
-     */
-    handleCreateTask: async function(event) {
-        debugger;
-        event.preventDefault();
-        // console.log(event);
-        // on récupère l'élément cliqué
-        const newTask = event.currentTarget;
-        // on récupère la value de l'input avec FormData
-        const dataTask = new FormData(newTask);
-        console.log(dataTask.get('title', 'category'));
-
-        // on crée le nouvel objet à convertir en json
-        const newTaskJson = {
-            "title": dataTask.get('title'),
-            "category_id": dataTask.get('category')
-        };
-
-        taskAdd.addTaskDB(newTaskJson);
-        
-    },
-
+    
     /**
      * ajoute les class et attribut pour afficher la sélection de la catégorie dans le DOM
      */
     addCategory: async function() {
-        // debugger;
-
         // condition si la partie category n'est pas dans le form => on l'ajoute
         const labelCategory = document.querySelector('.label-category');
         if (!labelCategory) {
@@ -94,7 +66,7 @@ const taskAdd = {
             // insertion de la balise <label> dans la div
             div.append(label);
             // attribut For
-            label.htmlFor ='category-select';
+            label.htmlFor ='task-category';
             label.textContent = 'Choisissez une catégorie';
             // class sur label
             label.classList.add('label-category');
@@ -102,14 +74,13 @@ const taskAdd = {
             // création de la balise <select>
             const select = document.createElement('select');
             // attribut name + id
-            select.setAttribute('name', 'category');
-            select.setAttribute('id', 'category');
+            select.setAttribute('name', 'category_id');
+            select.setAttribute('id', 'task-category');
             // insertion de la balise <select> dans le form
             div.append(select);
 
             // On récupère la liste des categories au format JSON
             const categories = await taskAdd.getCategories();
-            console.log(categories);
 
             // On boucle sur la liste des categories pour les insérer dans les options
             for (const category of categories) {
@@ -134,7 +105,6 @@ const taskAdd = {
 
         // conversion de la réponse depuis le format json
         let data = await response.json();
-        console.log(data);
 
         // propriété tableau vide pour récupérer les categories de notre API (id & name)
         const categoriesList = [];
@@ -150,8 +120,6 @@ const taskAdd = {
         // j'ajoute chaque categorie avec name et id dans mon tableau vide    
         categoriesList.push(categoryById);
         }
-
-        // console.log(categoriesList);
 
         return categoriesList;
 
@@ -172,16 +140,19 @@ const taskAdd = {
             body: JSON.stringify(task)
         });
 
-        if (response.status === 201) {
-            taskList.init();
+        if (response.status !== 201) {
+            const danger = document.querySelector('.danger');
+            danger.removeAttribute('hidden');
+            setTimeout(() => {
+                danger.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
+            }, 3000);
+        } else {
             const success = document.querySelector('.success');
+            success.textContent = "La nouvelle tâche a bien été ajoutée";
             success.removeAttribute('hidden');
             setTimeout(() => {
                 success.setAttribute("hidden", true); // Remettre l'attribut hidden après 3 secondes
             }, 3000);
-        } else {
-            const danger = document.querySelector('.danger');
-            danger.removeAttribute('hidden');
         }
 
     },

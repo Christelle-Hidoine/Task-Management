@@ -6,6 +6,7 @@
   <title>Task manager</title>
   <meta name="description" content="Un gestionnaire de tâches, pour vous aider au quotidien">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
   <script src="js/app.js" defer></script>
   <script src="js/taskList.js" defer></script>
   <script src="js/taskAdd.js" defer></script>
@@ -25,37 +26,25 @@
     </div>
 
     <div class="message success" hidden>
-      la nouvelle tâche a bien été ajoutée
+      La nouvelle tâche a bien été ajoutée
     </div>
     <div class="message danger" hidden>
-      oops, impossible de sauvegarder la tâche
+      Oops, impossible de sauvegarder la tâche
     </div>
     
     <ul class="tasklist">
-      <li data-id="0">
-        <p>sortir les poubelles</p>
-        <div class="delete"></div>
-        <div class="edit"></div>
-      </li>
-      <li data-id="1">
-        <p>communiquer avec l'API</p>
-        <div class="delete"></div>
-        <div class="edit"></div>
-      </li>
-      <li data-id="2">
-        <p>organiser une free-party</p>
-        <div class="delete"></div>
-        <div class="edit"></div>
-      </li>
     </ul>
 
     <div class="modal-dialog">
       <form>
         <h2>nouvelle tâche</h2>
         <label for="task-title" class="screen-reader-only">titre de la tâche</label>
-        <input name= "id" id="task-id" type="hidden">
-        <input name= "title" id="task-title" placeholder="titre de la tâche..." type="text" required>
-        <button>ajouter</button>
+        <input name="id" id="task-id" type="hidden">
+        <input name="title" id="task-title" placeholder="titre de la tâche..." type="text" required>
+        <button>Ajouter</button>
+        <div class="modal-dialog-close-button">
+          X
+        </div>
       </form>
     </div>
 
