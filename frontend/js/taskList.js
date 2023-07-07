@@ -134,7 +134,7 @@ const taskList = {
         // modification de la class sur div .modal-dialog
         const formElement = document.querySelector('.modal-dialog');
         formElement.classList.remove('show');
-        
+
     },
 
     

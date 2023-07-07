@@ -17,7 +17,7 @@ const taskAdd = {
         
         const closeModal = document.querySelector('.modal-dialog-close-button');
         closeModal.addEventListener('click', taskEdit.handleCloseModal);
-        
+
     },
 
     /**
