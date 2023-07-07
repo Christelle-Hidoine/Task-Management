@@ -43,6 +43,7 @@ const taskEdit = {
 
             // création de la balise <fieldset>
             const fieldset = document.createElement('fieldset');
+
             // création de la balise <legend>
             const legend = document.createElement('legend');
             legend.textContent = "Choisissez un tag";
@@ -118,6 +119,10 @@ const taskEdit = {
         form.querySelector('#task-id').value = taskId;
         form.querySelector('select[name="category_id"]').value = taskCategoryId;
 
+        if (button.textContent === 'Modifier') {
+            form.querySelector('fieldset').removeAttribute('hidden');
+        }
+
         tagNameList.forEach(function(tag) {
             const inputTag = document.getElementById(tag);
             if (inputTag) {
@@ -141,6 +146,8 @@ const taskEdit = {
         inputChecked.forEach(function(input){
             input.removeAttribute('checked');
         })
+        const fieldset = document.querySelector('fieldset');
+        fieldset.setAttribute('hidden', true);
     },
 
     /**
